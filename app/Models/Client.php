@@ -21,7 +21,7 @@ class Client extends Model
     protected $casts = [
         'name' => 'string',
         'email' => 'string',
-        'phone' => 'string',
+        'phone' => 'string', 
         
     ];
     protected $hidden = ['updated_at', 'created_at', 'deleted_at'];
