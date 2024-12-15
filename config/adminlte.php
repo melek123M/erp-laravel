@@ -301,12 +301,12 @@ return [
     'menu' => [
         [
             'text' => 'Clients',
-            'url' => 'admin/pages',
+            'url' => 'clients',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
             'text' => 'Factures',
-            'url' => 'admin/pages',
+            'url' => 'factures',
             'icon' => 'far fa-fw fa-file',
         ],
         

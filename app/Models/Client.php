@@ -25,9 +25,17 @@ class Client extends Model
         
     ];
     protected $hidden = ['updated_at', 'created_at', 'deleted_at'];
-    public static array $rules = [
-        'phone' => ['required', 'regex:/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/', 'unique:clients,phone'],
-        'email' => 'required|unique:clients,email',
-        
-    ];
+    
+    public static function rules(): array
+    {
+        return [
+            'phone' => ['required', 'regex:/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/', 'unique:clients,phone'],
+            'email' => 'required|unique:clients,email',
+            
+        ];
+    }
+    public static function messages(): array
+    {
+        return [];
+    }
 }
