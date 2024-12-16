@@ -28,12 +28,17 @@ class ClientController extends Controller
         return DataTables::of($clients)
             ->addColumn('action', function ($client) {
                 return '
-                    <button class="btn btn-primary edit-client" data-id="' . $client->id . '">Modifier</button>
-                    <button class="btn btn-danger delete-client" data-id="' . $client->id . '">Supprimer</button>
-                ';
+                <button class="btn btn-success edit-client" data-id="' . $client->id . '">Modifier</button>
+                <a href="' . route('clients.details', ['id' => $client->id]) . '" 
+                   class="btn btn-warning">
+                   Show
+                </a>
+                <button class="btn btn-danger delete-client" data-id="' . $client->id . '">Supprimer</button>
+            ';
             })
             ->make(true);
     }
+
 
     /**
      * Enregistre un nouveau client.
@@ -75,5 +80,11 @@ class ClientController extends Controller
         $client->delete();
 
         return response()->json(['success' => 'Client supprimé avec succès']);
+    }
+
+    public function details($id)
+    {
+        $client = Client::findOrFail($id);
+        return view('clients.details', compact('client'));
     }
 }

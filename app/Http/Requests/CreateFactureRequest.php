@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Client;
+use App\Models\Invoice;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateClientRequest extends FormRequest
+class CreateFactureRequest extends FormRequest
 {
     /**
      * Determine if the Composition is authorized to make this request.
@@ -24,17 +24,10 @@ class CreateClientRequest extends FormRequest
      */
     public function rules()
     {
-        return Client::rules();
+        return Invoice::rules();
     }
     public function messages(): array
     {
-        return Client::messages();
+        return Invoice::messages();
     }
-    // protected function failedValidation(Validator $validator)
-    // {
-    //     $errors = $validator->errors()->all();
-    //     throw new HttpResponseException(response()->json([
-    //         'message' => $errors[0],
-    //     ], 422));
-    // }
 }

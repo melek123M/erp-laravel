@@ -301,15 +301,10 @@ return [
     'menu' => [
         [
             'text' => 'Clients',
-            'url' => 'clients',
+            'url' => env('APP_URL') . '/clients',
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
-            'text' => 'Factures',
-            'url' => 'factures',
-            'icon' => 'far fa-fw fa-file',
-        ],
-        
+
     ],
 
     /*

@@ -8,7 +8,8 @@ $(document).ready(function () {
         return;
     }
 
-    function handleClientAction(form, route, successMessage, errorMessage) {
+    function handlefactureAction(form, route, successMessage, errorMessage) {
+        
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: route,
@@ -27,10 +28,9 @@ $(document).ready(function () {
                     if (backdrop2) {
                         backdrop2.remove();
                     }
-                    $('#addClientModal').hide();
-                    $('#editClientModal').hide();
-
-                    $('#clients-table').DataTable().ajax.reload();
+                    $('#addFactureModal').hide();
+                    $('#editFactureModal').hide();
+                    $('#invoices-table').DataTable().ajax.reload();
                     toastr.success(successMessage);
                     resolve(response);
                 },
@@ -48,65 +48,63 @@ $(document).ready(function () {
             });
         });
     }
-    $('#addClientForm').on('submit', function (e) {
+    $('#addFactureForm').on('submit', function (e) {
         e.preventDefault();
-        handleClientAction(
+        handlefactureAction(
             $(this),
-            window.routes.clientStore,
-            'Client ajouté avec succès',
-            'Erreur lors de l\'ajout du client'
+            window.routes.storeInvoice,
+            'facture ajouté avec succès',
+            'Erreur lors de l\'ajout du facture'
         ).then(() => {
-            console.log('Client ajouté avec succès');
+            console.log('facture ajouté avec succès');
         }).catch(() => {
-            console.log('Erreur lors de l\'ajout du client');
+            console.log('Erreur lors de l\'ajout du facture');
         });
     });
 
 
+    $(document).on('click', '.edit-facture', function () {
 
-    //Édition de client
-    $(document).on('click', '.edit-client', function () {
-
-        var clientId = $(this).data('id');
+        var factureId = $(this).data('id');
+        console.log(factureId);
+        
         $.ajax({
-            url: `/clients/${clientId}/edit`,
+            url: `/factures/${factureId}/edit`,
             method: 'GET',
             success: function (response) {
-                $('#clientId').val(response.id);
-                $('#edit_name').val(response.name);
-                $('#edit_email').val(response.email);
-                $('#edit_phone').val(response.phone);
-                const editModal = new bootstrap.Modal(document.getElementById('editClientModal'));
+                $('#factureId').val(response.id);
+                $('#edit_due_date').val(response.due_date);
+                $('#edit_amount').val(response.amount);
+                $('#edit_status').val(response.status);
+                const editModal = new bootstrap.Modal(document.getElementById('editFactureModal'));
                 editModal.show();
             },
             error: function () {
-                toastr.error('Impossible de charger les informations du client');
+                toastr.error('Impossible de charger les informations du factur');
             }
         });
     });
 
-    //Mise à jour de client
-    $('#editClientForm').on('submit', function (e) {
+    $('#editFactureForm').on('submit', function (e) {
         e.preventDefault();
-        var clientId = $('#clientId').val();
-        handleClientAction(
+        var factureId = $('#factureId').val();
+        handlefactureAction(
             $(this),
-            `/clients/${clientId}`,
-            'Client modifié avec succès',
-            'Erreur lors de la modification du client'
+            `/factures/${factureId}`,
+            'facture modifié avec succès',
+            'Erreur lors de la modification du facture'
         );
     });
 
-    //Suppression de client
-    var clientToDelete = null;
-    $(document).on('click', '.delete-client', function () {
-        clientToDelete = $(this).data('id');
-        const deletModal = new bootstrap.Modal(document.getElementById('deleteClientModal'));
+    var factureToDelete = null;
+    $(document).on('click', '.delete-facture', function () {
+        factureToDelete = $(this).data('id');
+        const deletModal = new bootstrap.Modal(document.getElementById('deleteFactureModal'));
         deletModal.show();
     });
 
-    $('#deleteClientBtn').on('click', function () {
-        $('#deleteClientModal').hide();
+    $('#deleteFactureBtn').on('click', function () {
+        $('#deleteFactureModal').hide();
         const backdrop = document.querySelector('.modal-backdrop');
         if (backdrop) {
             backdrop.remove();
@@ -115,29 +113,36 @@ $(document).ready(function () {
             headers: {
                 'X-CSRF-TOKEN': '5GvkDiXrqiJy7YZcp7rZdB5JKpO1FYjyc2SXNfQd'
             },
-            url: `/clients/${clientToDelete}`,
+            url: `/factures/${factureToDelete}`,
             method: 'DELETE',
             success: function (response) {
-                $('#clients-table').DataTable().ajax.reload();
-                toastr.success('Client supprimé avec succès');
+                $('#invoices-table').DataTable().ajax.reload();
+                toastr.success('facture supprimé avec succès');
             },
             error: function () {
-                toastr.error('Erreur lors de la suppression du client');
+                toastr.error('Erreur lors de la suppression du facture');
             }
         });
     });
 
-    // Initialisation de DataTables
-    if ($('#clients-table').length) {
-        $('#clients-table').DataTable({
+
+
+    if ($('#invoices-table').length) {
+
+        $('#invoices-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: window.routes.clientData,
+            ajax: window.routes.listeFactures,
             columns: [
-                { data: 'name', name: 'name' },
-                { data: 'email', name: 'email' },
-                { data: 'phone', name: 'phone' },
-                { data: 'action', orderable: false, searchable: false }
+                { data: 'amount', name: 'amount' },
+                { data: 'due_date', name: 'due_date' },
+                { data: 'status', name: 'status' },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                }
             ],
             pagingType: "full_numbers",
             language: {
@@ -158,9 +163,7 @@ $(document).ready(function () {
                 info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées"
             },
             order: [[0, 'asc']]
-
         });
     }
-  
 
 });
