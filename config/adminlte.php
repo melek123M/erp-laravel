@@ -299,6 +299,12 @@ return [
     */
 
     'menu' => [
+
+        [
+            'text' => 'Dashboard',
+            'url' => env('APP_URL') . '/dashboard',
+            'icon' => 'fas fa-fw fa-tachometer-alt',
+        ],
         [
             'text' => 'Clients',
             'url' => env('APP_URL') . '/clients',
