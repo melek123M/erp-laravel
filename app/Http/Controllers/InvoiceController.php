@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Client;
 use App\Services\InvoiceService;
-use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\CreateFactureRequest;
+
+use function Laravel\Prompts\alert;
 
 class InvoiceController extends Controller
 {
@@ -25,13 +26,13 @@ class InvoiceController extends Controller
         $invoices = $client->invoices()->get();
 
         return DataTables::of($invoices)
-        ->addColumn('action', function ($invoices) {
-            return '
+            ->addColumn('action', function ($invoices) {
+                return '
             <button class="btn btn-success edit-facture" data-id="' . $invoices->id . '">Modifier</button>
             <button class="btn btn-danger delete-facture" data-id="' . $invoices->id . '">Supprimer</button>
         ';
-        })
-        ->make(true);
+            })
+            ->make(true);
     }
 
     public function store(CreateFactureRequest $request, $clientId)
@@ -69,5 +70,16 @@ class InvoiceController extends Controller
         $this->invoiceService->deleteInvoice($invoice);
 
         return response()->json(['success' => 'Facture supprimée avec succès.']);
+    }
+    public function getUnpaidInvoices($clientId)
+    {
+        $invoices = $this->invoiceService->getOverdueInvoices($clientId);
+
+        return response()->json($invoices);
+    }
+    public function getTotalUnpaidInvoices($clientId)
+    {
+        $totalUnpaidInvoices = $this->invoiceService->getTotalUnpaidInvoices($clientId);
+        return response()->json(['total' => $totalUnpaidInvoices]);
     }
 }

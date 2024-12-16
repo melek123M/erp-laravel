@@ -30,9 +30,9 @@ class InvoiceService
             ->sum('amount');
     }
 
-    public function getOverdueInvoices()
+    public function getOverdueInvoices($clientId)
     {
-        return Invoice::where('status', 'impayée')
+        return Invoice::where(['status' => 'impayée', 'client_id' => $clientId])
             ->where('due_date', '<', now())
             ->get();
     }

@@ -20,4 +20,6 @@ Route::post('factures/{clientId}', [InvoiceController::class, 'store'])->name('f
 Route::get('factures/{factureId}/edit', [InvoiceController::class, 'edit'])->name('factures.edit');
 Route::put('factures/{factureId}', [InvoiceController::class, 'update'])->name('factures.update');
 Route::delete('factures/{factureId}', [InvoiceController::class, 'destroy'])->name('factures.destroy');
+Route::get('factures/{clientId}/unpaid', [InvoiceController::class, 'getUnpaidInvoices'])->name('factures.unpaid');
+Route::get('factures/{clientId}/totalUnpaid', [InvoiceController::class, 'getTotalUnpaidInvoices'])->name('factures.totalUnpaid');
 

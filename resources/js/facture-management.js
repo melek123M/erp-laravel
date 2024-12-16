@@ -9,7 +9,7 @@ $(document).ready(function () {
     }
 
     function handlefactureAction(form, route, successMessage, errorMessage) {
-        
+
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: route,
@@ -67,7 +67,7 @@ $(document).ready(function () {
 
         var factureId = $(this).data('id');
         console.log(factureId);
-        
+
         $.ajax({
             url: `/factures/${factureId}/edit`,
             method: 'GET',
@@ -125,7 +125,45 @@ $(document).ready(function () {
         });
     });
 
+    $('#loadUnpaidInvoices').on('click', function () {
+        fetch(window.routes.unpaidInvoice)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#unpaid-invoices-table tbody');
+                tableBody.innerHTML = '';
+                if (data.length === 0) {
+                    tableBody.innerHTML =
+                        `<tr><td colspan="3" class="text-center">Aucune facture impayée</td></tr>`;
+                } else {
+                    data.forEach(invoice => {
+                        tableBody.innerHTML += `
+                                    <tr>
+                                        <td>${invoice.amount}</td>
+                                        <td>${invoice.due_date}</td>
+                                        <td>${invoice.status}</td>
+                                    </tr>
+                                `;
+                    });
+                }
+            })
+            .catch(error => console.error('Erreur lors du chargement des factures impayées :',
+                error));
 
+    });
+
+    $('#calculateUnpaidTotal').on('click', function () {
+        
+        fetch(window.routes.totalUnpaid)
+            .then(response => response.json())
+            .then(data => {
+                const unpaidTotalContainer = document.getElementById('unpaidTotalContainer');
+                const unpaidTotalAmount = document.getElementById('unpaidTotalAmount');
+
+                unpaidTotalAmount.textContent = data.total || 0;
+                unpaidTotalContainer.style.display = 'block';
+            })
+            .catch(error => console.error('Erreur lors du calcul du total des factures impayées :', error));
+    });
 
     if ($('#invoices-table').length) {
 
