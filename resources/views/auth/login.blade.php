@@ -66,6 +66,12 @@
                 </form>
             </div>
         </div>
+
+        <!-- Bouton pour rediriger vers la page d'inscription -->
+        <div class="mt-3 text-center">
+            <p>Don't have an account?</p>
+            <a href="{{ route('register') }}" class="btn btn-success">{{ __('Register') }}</a>
+        </div>
     </div>
 </div>
 @endsection

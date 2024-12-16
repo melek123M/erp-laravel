@@ -35,7 +35,9 @@ class Client extends Model
     }
     public static function messages(): array
     {
-        return [];
+        return [
+            'phone.regex' => 'Le numéro de téléphone doit être valide. Exemple : +33 6 12 34 56 78 ou 06 12 34 56 78.',
+        ];
     }
     public function invoices()
     {
